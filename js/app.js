@@ -2,28 +2,30 @@
 // Memory Game – Picsum API (Completely Free, No Key)
 // -------------------------------------------------------------
 
-const gameContainer = document.getElementById("game");
-const resetBtn = document.getElementById("resetBtn");
+const gameContainer = document.getElementById("game"); // Det här hittar HTML elementet gameContainer. Elementet har också ID "game".
+const resetBtn = document.getElementById("resetBtn"); // Det här hittar HTML elementet resetBtn. Som startar om spelet när du trycker på den.
 
-const PAIRS = 9;
+const PAIRS = 9; // Det här antal kortpar. Kortparen dubbleras för att skapa ett memory spel.
 
-let firstCard = null;
-let secondCard = null;
-let lockBoard = false;
+let firstCard = null; // Låser första kortet användaren väljer.
+let secondCard = null; // Låser andra kortet användaren väljer.
+let lockBoard = false; // Denna Boolean talar om för "brädet när det ska låsas. Allstså när ett par hittas så låses brädet med de öppna korten.
 let cards = [];
 
 // -------------------------------------------------------------
 // Fetch 9 images from Picsum API
 // -------------------------------------------------------------
-async function fetchImages() {
+async function fetchImages() { // FETCH REQUEST. SKAPAR ASYNCRON DÄR VI KAN ANVÄNDA AWAIT SYNTAX. FUNKTION HÄMTAR BILDERNA FRÅN API. VÄNRTAR PÅ ATT HÄMTA OBJECT TILLS NÄSTA BÖRJAR
   const response = await fetch(`https://picsum.photos/v2/list?limit=${PAIRS}`);
-  const data = await response.json();
+  const data = await response.json(); // KONVERTERAR TILL ETT JAVASCRIPT OBJECT
 
   // Convert to smaller image URLs
   return data.map(img =>
     `https://picsum.photos/id/${img.id}/300/300`
   );
 }
+
+
 
 // -------------------------------------------------------------
 // Game Setup
