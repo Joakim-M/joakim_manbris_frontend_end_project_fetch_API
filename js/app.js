@@ -2,7 +2,7 @@
 // Memory Game – Picsum API (Completely Free, No Key)
 // -------------------------------------------------------------
 
-const gameContainer = document.getElementById("game"); // Det här hittar HTML elementet gameContainer. Elementet har också ID "game".
+const gameContainer = document.getElementById("game"); // Det här hittar HTML elementet gameContainer. Elementet har också ett ID "game".
 const resetBtn = document.getElementById("resetBtn"); // Det här hittar HTML elementet resetBtn. Som startar om spelet när du trycker på den.
 
 const PAIRS = 9; // Det här antal kortpar. Kortparen dubbleras för att skapa ett memory spel.
@@ -10,7 +10,7 @@ const PAIRS = 9; // Det här antal kortpar. Kortparen dubbleras för att skapa e
 let firstCard = null; // Låser första kortet användaren väljer.
 let secondCard = null; // Låser andra kortet användaren väljer.
 let lockBoard = false; // Denna Boolean talar om för "brädet när det ska låsas. Allstså när ett par hittas så låses brädet med de öppna korten.
-let cards = [];
+let cards = []; // Här skapas en tom array "lista" som sedan sparar alla kort i spelet.
 
 // -------------------------------------------------------------
 // Fetch 9 images from Picsum API
@@ -30,59 +30,59 @@ async function fetchImages() { // FETCH REQUEST. SKAPAR ASYNCRON DÄR VI KAN ANV
 // -------------------------------------------------------------
 // Game Setup
 // -------------------------------------------------------------
-async function setupGame() {
-  gameContainer.innerHTML = "";
-  firstCard = null;
-  secondCard = null;
-  lockBoard = false;
+async function setupGame() { //Den här funktionen startar och restartar spelet.
+  gameContainer.innerHTML = ""; //Rensar brädet
+  firstCard = null; // "glömmer första klickade kortet"
+  secondCard = null; // "glömmer andra klickade kortet"
+  lockBoard = false; // När det blir false får du klicka på korten igen. Brädet är olåst.
 
-  const images = await fetchImages();
+  const images = await fetchImages(); // Här fetchas mina bilder från API:n
 
   // Duplicate → 18 cards
-  cards = [...images, ...images];
+  cards = [...images, ...images]; // Här dupliceras mina 9 bilder [...1X, ...2X].
 
   // Shuffle
-  cards.sort(() => Math.random() - 0.5);
+  cards.sort(() => Math.random() - 0.5); // Här blandas korten i en slumpmässig ordning.
 
   // Create cards
-  cards.forEach(imgURL => {
-    const card = document.createElement("div");
-    card.classList.add("card");
-    card.dataset.symbol = imgURL;
+  cards.forEach(imgURL => { // Här skapas ett kort för varje bild alltså 9x2 så vi får par.
+    const card = document.createElement("div"); // Här skapas brädet med korten baserat på <div class="game-container" id="game"></div> i HTML koden.
+    card.classList.add("card"); // Här kopplas kortet till CSS klassen "card"
+    card.dataset.symbol = imgURL; // Här lagras informationen om vilken bild som tillhör vilket kort. Så spelet para i hop par.
 
-    const img = document.createElement("img");
-    img.src = imgURL;
-    img.alt = "image";
-    img.style.display = "none";
+    const img = document.createElement("img"); // Här skapas ett img element.
+    img.src = imgURL; // Här är källan för bilden som ska användas till det skapade kortet.
+    img.alt = "image"; // Här är en alt bildtext om bilden inte laddar in korrekt. Just nu är texten bara "image".
+    img.style.display = "none"; // Detta gömmer först bilden så att bilden börjar med motivet ner mot spelbrädet.
 
-    card.appendChild(img);
-    card.addEventListener("click", flipCard);
-    gameContainer.appendChild(card);
+    card.appendChild(img); // Här lägger vi ihop <div> "card" med img elementet vi tidigare skapat. appenchild lägger bilden i kortet.
+    card.addEventListener("click", flipCard); // Här skapar vi en händelse som gör att kortet vänds när vi klickar på det. När vi klickar så körs funktionen flipCard.
+    gameContainer.appendChild(card); // Här lägger vi till appendChild(card) allstå kortet till spelbrädet gameContainer.
   });
 }
 
 // -------------------------------------------------------------
 // Card Flip Logic
 // -------------------------------------------------------------
-function flipCard() {
-  if (lockBoard) return;
-  if (this === firstCard) return;
+function flipCard() {// Den här funktionen körs när spelaren klickar på ett kort. låter spelaren flippa card
+  if (lockBoard) return; // Hindrar spelaren från att klicka på ytterligare kort när spelet är "upptaget" typ när animationer sker. Exempel när korten flippas.
+  if (this === firstCard) return; // Förhindrar spelaren att klicka på samma kort som sitt första klick.
 
-  this.classList.add("flipped");
-  this.querySelector("img").style.display = "block";
+  this.classList.add("flipped"); // Lägger till en CSS class som visar när kortet efter det flippats.
+  this.querySelector("img").style.display = "block"; // Detta väljer "img" som hamnar på kortet som flippas.
 
-  if (!firstCard) {
+  if (!firstCard) { // Om klicket är det första så "låses" kortet.
     firstCard = this;
     return;
   }
 
-  secondCard = this;
+  secondCard = this; // På andra klicket så låses kortet sen och sen kollas om det är en match. .
   checkMatch();
 }
 
 function checkMatch() {
   const match = firstCard.dataset.symbol === secondCard.dataset.symbol;
-  match ? disableCards() : unflipCards();
+  match ? disableCards() : unflipCards(); // Om det blir en matchning så skickas true och disabledCards körs och paret tas ur spelet. om det blir false så flippas korteen tillbaks
 }
 
 function disableCards() {
