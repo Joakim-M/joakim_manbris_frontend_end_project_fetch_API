@@ -83,6 +83,7 @@ function flipCard() {// Den här funktionen körs när spelaren klickar på ett 
 function checkMatch() {
   const match = firstCard.dataset.symbol === secondCard.dataset.symbol;
   match ? disableCards() : unflipCards(); // Om det blir en matchning så skickas true och disabledCards körs och paret tas ur spelet. om det blir false så flippas korteen tillbaks
+
 }
 
 function disableCards() { // Denna funktion körs när det blir en matchning. Och gör i stort att paret tas ur spelet.
@@ -103,7 +104,7 @@ function unflipCards() { // Denna funktion körs när korten inte matchar.
     secondCard.querySelector("img").style.display = "none"; // Gömmer bilden för andra kortet genom att ta bort bilden så kortet ser ut att vara uppochnervänt.
 
     firstCard.classList.remove("flipped"); // Detta tar bort CSS:n
-    secondCard.classList.remove("flipped");
+    secondCard.classList.remove("flipped"); // Detta tar bort CSS:n
 
     resetTurn(); // Kallar på funktionen resetTurn.
   }, 900); // Tidsåtgång 900 millisekunder.

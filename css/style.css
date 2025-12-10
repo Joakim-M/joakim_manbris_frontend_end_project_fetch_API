@@ -32,6 +32,12 @@ body {
   font-family: var(--font-sans);
   color: var(--text);
   text-align: center;
+
+  background-image: url("../img/office-space.png"); /* ta bort om inte funkar */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 h1 {
@@ -52,6 +58,7 @@ h1 {
   grid-template-columns: repeat(6, 1fr);
   padding: 20px;
   gap: 2.0vw;
+
 }
 
 /* -------------------------------------------------------------
@@ -73,6 +80,7 @@ h1 {
   cursor: pointer;
   transition: all 0.22s ease-out;
   user-select: none;
+
 }
 
 .card:hover {
