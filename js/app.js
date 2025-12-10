@@ -32,8 +32,8 @@ async function fetchImages() { // FETCH REQUEST. SKAPAR ASYNCRON DÄR VI KAN ANV
 // -------------------------------------------------------------
 async function setupGame() { //Den här funktionen startar och restartar spelet.
   gameContainer.innerHTML = ""; //Rensar brädet
-  firstCard = null; // "glömmer första klickade kortet"
-  secondCard = null; // "glömmer andra klickade kortet"
+  firstCard = null; // "Glömmer första klickade kortet"
+  secondCard = null; // "Glömmer andra klickade kortet"
   lockBoard = false; // När det blir false får du klicka på korten igen. Brädet är olåst.
 
   const images = await fetchImages(); // Här fetchas mina bilder från API:n
@@ -85,47 +85,41 @@ function checkMatch() {
   match ? disableCards() : unflipCards(); // Om det blir en matchning så skickas true och disabledCards körs och paret tas ur spelet. om det blir false så flippas korteen tillbaks
 }
 
-function disableCards() {
-  firstCard.classList.add("matched");
-  secondCard.classList.add("matched");
+function disableCards() { // Denna funktion körs när det blir en matchning. Och gör i stort att paret tas ur spelet.
+  firstCard.classList.add("matched"); // Första kortet läggs till.
+  secondCard.classList.add("matched"); // Andra kortet läggs till.
 
-  firstCard.removeEventListener("click", flipCard);
-  secondCard.removeEventListener("click", flipCard);
+  firstCard.removeEventListener("click", flipCard); // Detta tar bort EventListener funktionen "click" som gör att kortet flippas. Kortet blir oklickbart.
+  secondCard.removeEventListener("click", flipCard); // Detta tar bort EventListener funktionen "click" som gör att kortet flippas. Kortet blir oklickbart.
 
-  resetTurn();
+  resetTurn(); // Kallar på funktionen resetTurn.
 }
 
-function unflipCards() {
-  lockBoard = true;
+function unflipCards() { // Denna funktion körs när korten inte matchar.
+  lockBoard = true; // Detta gör att spelaren inte kan klicka på fler kort när korten vänds tillbaka.
 
-  setTimeout(() => {
-    firstCard.querySelector("img").style.display = "none";
-    secondCard.querySelector("img").style.display = "none";
+  setTimeout(() => { // Detta talar om hur länge korten visas innan dom vänds ner igen. Alltså 900 millisekunder om vi tittar längre ner i koden.
+    firstCard.querySelector("img").style.display = "none"; // Gömmer bilden för första kortet genom att ta bort bilden så kortet ser ut att vara uppochnervänt.
+    secondCard.querySelector("img").style.display = "none"; // Gömmer bilden för andra kortet genom att ta bort bilden så kortet ser ut att vara uppochnervänt.
 
-    firstCard.classList.remove("flipped");
+    firstCard.classList.remove("flipped"); // Detta tar bort CSS:n
     secondCard.classList.remove("flipped");
 
-    resetTurn();
-  }, 900);
+    resetTurn(); // Kallar på funktionen resetTurn.
+  }, 900); // Tidsåtgång 900 millisekunder.
 }
 
-function resetTurn() {
+function resetTurn() { // Detta är funktionen resetTurn. De valda korten vänds tillbaka, spelbrädet låses upp
   [firstCard, secondCard, lockBoard] = [null, null, false];
 }
 
 // -------------------------------------------------------------
 // Restart button
 // -------------------------------------------------------------
-resetBtn.addEventListener("click", setupGame);
+resetBtn.addEventListener("click", setupGame); // Här kallar vi på <button id="resetBtn">Restart Game</button> i HTML. Vi lägger till addEventListener kopplat till "click" som kör funktionen setupGame och då startas spelet om.
 
 // -------------------------------------------------------------
 // Start
 // -------------------------------------------------------------
-setupGame();
+setupGame(); // Här kallar vi funktion setupGame när browsern öppnas.
 
-async function testAPI() {
-  const response = await fetch("https://picsum.photos/v2/list");
-  const data = await response.json();
-  console.log(data);
-}
-testAPI();
